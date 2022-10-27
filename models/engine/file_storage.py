@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 """serializes and deserializes json to and from file"""
 import json
-import os
 
 
 class FileStorage:
@@ -11,11 +10,12 @@ class FileStorage:
 
     def all(self):
         """returns the dictionary  representation"""
+        self.reload()
         return self.__objects
 
     def new(self, obj):
         """add the new object to the dictionary __objects"""
-        key = str(type(obj).__name__) + '.' + obj.id
+        key = str(obj.__class__.__name__) + '.' + obj.id
         self.__objects[key] = obj.to_dict()
 
     def save(self):
@@ -25,9 +25,8 @@ class FileStorage:
 
     def reload(self):
         """Deserialize dictionary from string in file"""
-        if os.path.isfile(self.__file_path):
+        try:
             with open(self.__file_path, 'r', encoding='utf-8') as f:
-                try:
-                    self.__objects = json.load(f)
-                except Exception:
-                    pass
+                self.__objects = json.load(f)
+        except Exception:
+            pass

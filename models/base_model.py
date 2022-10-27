@@ -12,10 +12,16 @@ class BaseModel:
 
     def __init__(self, *args, **kwargs):
         """initalizes instances when class is created"""
-        self.id = str(uuid.uuid4())
-        self.created_at = dt.now()
-        self.updated_at = dt.now()
-        if len(kwargs) < 1:
+        if kwargs:
+            for key, value in kwargs.items():
+                if key == 'created_at' or key == 'updated_at':
+                    value = dt.strptime(value, "%Y-%m-%dT%H:%M:%S.%f")
+                if key != '__class__' and value:
+                    setattr(self, key, value)
+        else:
+            self.id = str(uuid.uuid4())
+            self.created_at = dt.now()
+            self.updated_at = self.created_at
             storage.new(self)
 
     def __str__(self):
