@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 """module console holds the methods for testing the airbnb backend"""
 import cmd
+from datetime import datetime as dt
 import re
 from new_class import new_class
 from models import storage
@@ -104,11 +105,12 @@ class HBNBCommand(cmd.Cmd):
                 print("** value missing **")
             else:
                 value = obj_list[key]
-                try:
+                if cmd[2] in value:
                     value[cmd[2]] = cmd[3]
-                except Exception:
+                    value['updated_at'] = dt.isoformat(dt.now())
+                else:
                     print("** value missing **")
-                    return True
+                    return False
                 a = new_class(cmd[0], value)
                 a.save()
 
