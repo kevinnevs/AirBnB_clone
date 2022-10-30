@@ -1,10 +1,9 @@
 #!/usr/bin/python3
 """module console holds the methods for testing the airbnb backend"""
 import cmd
-from datetime import datetime as dt
 import re
-from new_class import new_class
 from models import storage
+from models.new_class import make_class
 
 
 class HBNBCommand(cmd.Cmd):
@@ -21,7 +20,7 @@ class HBNBCommand(cmd.Cmd):
             if cmd[0] not in self.allowed:
                 print("** class doesn't exist **")
             else:
-                a = new_class(cmd[0])
+                a = make_class(cmd[0])
                 print(a.id)
                 storage.save()
 
@@ -35,12 +34,9 @@ class HBNBCommand(cmd.Cmd):
         elif len(cmd) < 2:
             print("** instance id missing **")
         else:
-            obj_list = storage.all()
             key = cmd[0] + '.' + cmd[1]
-            if key in obj_list:
-                a_dic = obj_list[key]
-                a = new_class(cmd[0], a_dic)
-                print(a)
+            if key in storage.all().keys():
+                print(storage.all()[key])
             else:
                 print("** no instance found **")
 
@@ -54,35 +50,30 @@ class HBNBCommand(cmd.Cmd):
         elif len(cmd) < 2:
             print("** instance id missing **")
         else:
-            obj_list = storage.all()
             key = cmd[0] + '.' + cmd[1]
-            if key in obj_list:
-                del obj_list[key]
+            if key in storage.all().keys():
+                del storage.all()[key]
                 storage.save()
             else:
                 print("** no instance found **")
 
     def do_all(self, obj):
         """usage: all [obj]\nreturns all saved instances or of type obj"""
-        obj_list = storage.all()
         obj_str = []
         if obj:
             if obj in self.allowed:
                 pattern = '^' + obj
-                for key, value in obj_list.items():
+                for key, value in storage.all().items():
                     if re.match(pattern, key) is None:
                         continue
                     else:
-                        instance = new_class(obj, value)
-                        obj_str.append(instance.__str__())
+                        obj_str.append(str(value))
                 print(obj_str)
             else:
                 print("** class doesn't exist **")
         else:
-            for key, value in obj_list.items():
-                obj = value['__class__']
-                instance = new_class(obj, value)
-                obj_str.append(instance.__str__())
+            for key, value in storage.all().items():
+                obj_str.append(str(value))
             print(obj_str)
 
     def do_update(self, cmd):
@@ -95,24 +86,24 @@ class HBNBCommand(cmd.Cmd):
         elif len(cmd) < 2:
             print("** instance id missing **")
         else:
-            obj_list = storage.all()
             key = cmd[0] + '.' + cmd[1]
-            if key not in obj_list:
+            if key not in storage.all().keys():
                 print("** no instance found **")
             elif len(cmd) < 3:
                 print("** attribute name missing **")
             elif len(cmd) < 4:
                 print("** value missing **")
             else:
-                value = obj_list[key]
-                if cmd[2] in value:
-                    value[cmd[2]] = cmd[3]
-                    value['updated_at'] = dt.isoformat(dt.now())
-                else:
-                    print("** value missing **")
-                    return False
-                a = new_class(cmd[0], value)
+                a = storage.all()[key]
+                del storage.all()[key]
+                setattr(a, cmd[2], cmd[3])
+                storage.new(a)
                 a.save()
+
+    def help_update(self):
+        """returns the help manual for update command"""
+        print("Usage: update <class> <id> <attribute> <value>\
+\nchanges value of attribute to a new value and updates time")
 
 
 if __name__ == '__main__':
