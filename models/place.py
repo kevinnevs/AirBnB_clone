@@ -1,14 +1,12 @@
 #!/usr/bin/python3
 """
 class Place that inherits from BaseModel
-"""
+module place holds the description of the place"""
 from models.base_model import BaseModel
 
 
 class Place(BaseModel):
-    """
-    public class attribute
-    """
+    """class Place holds location description of the Airbnb"""
     city_id = ""
     user_id = ""
     name = ""
