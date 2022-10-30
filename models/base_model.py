@@ -7,8 +7,6 @@ from datetime import datetime as dt
 
 class BaseModel:
     """The base class defining common attributes for all other classes"""
-    name = None
-    my_number = None
 
     def __init__(self, *args, **kwargs):
         """initalizes instances when class is created"""
@@ -26,8 +24,8 @@ class BaseModel:
 
     def __str__(self):
         """Representation of the Basemodel"""
-        me = '[' + str(type(self).__name__) + '] ' + '(' + self.id + ') '
-        return me + str(self.__dict__)
+        return "[{}] ({}) {}"\
+            .format(type(self).__name__, self.id, self.__dict__)
 
     def save(self):
         """updates the time the object is changed"""
@@ -36,10 +34,7 @@ class BaseModel:
 
     def to_dict(self):
         """returns all instance attributes including unset"""
-        my_dict = dict()
-        my_dict['name'] = self.name
-        my_dict['my_number'] = self.my_number
-        my_dict['id'] = self.id
+        my_dict = self.__dict__
         my_dict['__class__'] = str(type(self).__name__)
         my_dict['created_at'] = dt.isoformat(self.created_at)
         my_dict['updated_at'] = dt.isoformat(self.updated_at)
