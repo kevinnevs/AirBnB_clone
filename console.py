@@ -24,7 +24,7 @@ class HBNBCommand(cmd.Cmd):
     prompt = '(hbnb) '
     classes = {"BaseModel",
                "User", "State", "City", "Amenity", "Place", "Review"}
-    
+
     def do_quit(self, line):
         'Quit comand to exit the program'
         return True
@@ -36,11 +36,11 @@ class HBNBCommand(cmd.Cmd):
         create an object
         """
         if not len(line):
-             print("** class name missing **")
-             return
+            print("** class name missing **")
+            return
         if line not in HBNBCommand.classes:
-             print("** class doesn't exist **")
-             return
+            print("** class doesn't exist **")
+            return
         newObject = eval(line)()
         print(newObject.id)
         newObject.save()
@@ -50,38 +50,39 @@ class HBNBCommand(cmd.Cmd):
         shows an object
         """
         if not len(line):
-             print("** class name is missing **")
-             return
+            print("** class name is missing **")
+            return
         strings = split(line)
         if strings[0] not in HBNBCommand.classes:
-             print("** class doesn't exist **")
-             return
+            print("** class doesn't exist **")
+            return
         if len(strings) == 1:
-             print("** instance id missing **")
-             return
+            print("** instance id missing **")
+            return
         keyValue = strings[0] + '.' + strings[1]
         if keyValue not in storage.all().keys():
-             print("** no instance found **")
+            print("** no instance found **")
         else:
-             print(storage.all()[keyValue])
+            print(storage.all()[keyValue])
 
     def do_destroy(self, line):
         """
         deletes an object
         """
         if not len(line):
-             print("** class name is missing **")
+            print("** class name is missing **")
+            return
         strings = split(line)
         if strings[0] not in HBNBCommand.classes:
-             print("** class doesn't exist **")
-             return
+            print("** class doesn't exist **")
+            return
         if len(strings) == 1:
-             print("** instance id missing **")
-             return
+            print("** instance id missing **")
+            return
         keyValue = strings[0] + '.' + strings[1]
         if keyValue not in storage.all().keys():
-             print("** no instance found **")
-             return
+            print("** no instance found **")
+            return
         del storage.all()[keyValue]
         storage.save()
 
@@ -90,12 +91,12 @@ class HBNBCommand(cmd.Cmd):
         prints all
         """
         if not len(line):
-             print([obj for obj in storage.all().values()])
-             return
+            print([obj for obj in storage.all().values()])
+            return
         strings = split(line)
         if strings[0] not in HBNBCommand.classes:
-             print("** class doesn't exist **")
-             return
+            print("** class doesn't exist **")
+            return
         print([obj for obj in storage.all().values()
                if strings[0] == type(obj).__name__])
 
@@ -127,7 +128,7 @@ class HBNBCommand(cmd.Cmd):
             return
         try:
             setattr(storage.all()[keyValue], strings[2], eval(strings[3]))
-        except:
+        except Exception:
             setattr(storage.all()[keyValue], strings[2], strings[3])
 
     def emptyline(self):
@@ -144,7 +145,7 @@ class HBNBCommand(cmd.Cmd):
         try:
             newdict = newstring[newstring.find("{")+1:newstring.rfind("}")]
             return eval("{" + newdict + "}")
-        except:
+        except Exception:
             return None
 
     def default(self, line):
@@ -182,7 +183,8 @@ class HBNBCommand(cmd.Cmd):
                 self.do_update(key)
         else:
             print("*** Unknown syntax: {}".format(line))
-            return 
+            return
+
 
 if __name__ == '__main__':
     HBNBCommand().cmdloop()
