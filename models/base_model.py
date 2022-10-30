@@ -27,6 +27,7 @@ class BaseModel:
             self.updated_at = self.created_at
             models.storage.new(self)
 
+
     def __str__(self):
         """
         string representation of base model
