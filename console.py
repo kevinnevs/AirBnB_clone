@@ -50,7 +50,7 @@ class HBNBCommand(cmd.Cmd):
         shows an object
         """
         if not len(line):
-            print("** class name is missing **")
+            print("** class name missing **")
             return
         strings = split(line)
         if strings[0] not in HBNBCommand.classes:
@@ -70,7 +70,7 @@ class HBNBCommand(cmd.Cmd):
         deletes an object
         """
         if not len(line):
-            print("** class name is missing **")
+            print("** class name missing **")
             return
         strings = split(line)
         if strings[0] not in HBNBCommand.classes:
@@ -114,16 +114,16 @@ class HBNBCommand(cmd.Cmd):
         if strings[0] not in HBNBCommand.classes:
             print("** class doesn't exist **")
             return
-        if len(strings) == 1:
+        if len(strings) < 2:
             print("** instance id missing **")
         key = strings[0] + '.' + strings[1]
         if key not in storage.all().keys():
             print("** no instance found **")
             return
-        if len(strings) == 2:
+        if len(strings) < 3:
             print("** attribute name missing **")
             return
-        if len(strings) == 3:
+        if len(strings) < 4:
             print("** value missing **")
             return
         a = storage.all()[key]
