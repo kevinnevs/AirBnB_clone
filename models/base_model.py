@@ -3,7 +3,7 @@
 Base Model that defines all comon attributes/methods for other classes
 """
 import uuid
-from models
+import models
 from datetime import datetime
 
 
