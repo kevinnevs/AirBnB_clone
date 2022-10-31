@@ -116,6 +116,7 @@ class HBNBCommand(cmd.Cmd):
             return
         if len(strings) < 2:
             print("** instance id missing **")
+            return
         key = strings[0] + '.' + strings[1]
         if key not in storage.all().keys():
             print("** no instance found **")
