@@ -17,8 +17,9 @@ class FileStorage:
 
     def new(self, obj):
         """add the new object to the dictionary __objects"""
-        key = str(obj.__class__.__name__) + '.' + obj.id
-        self.__objects.update({key: obj})
+       if obj:
+            key = "{}.{}".format(type(obj).__name__, obj.id)
+            self.__objects[key] = obj
 
     def save(self):
         """save dictionary to json file"""
