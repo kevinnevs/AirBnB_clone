@@ -116,8 +116,8 @@ class HBNBCommand(cmd.Cmd):
             return
         if len(strings) == 1:
             print("** instance id missing **")
-        keyValue = strings[0] + '.' + strings[1]
-        if keyValue not in storage.all().keys():
+        key = strings[0] + '.' + strings[1]
+        if key not in storage.all().keys():
             print("** no instance found **")
             return
         if len(strings) == 2:
@@ -126,10 +126,14 @@ class HBNBCommand(cmd.Cmd):
         if len(strings) == 3:
             print("** value missing **")
             return
+        a = storage.all()[key]
+        del storage.all()[key]
         try:
-            setattr(storage.all()[keyValue], strings[2], eval(strings[3]))
+            setattr(a, strings[2], eval(strings[3]))
         except Exception:
-            setattr(storage.all()[keyValue], strings[2], strings[3])
+            setattr(a, strings[2], strings[3])
+        storage.new(a)
+        a.save()
 
     def emptyline(self):
         """
@@ -184,6 +188,11 @@ class HBNBCommand(cmd.Cmd):
         else:
             print("*** Unknown syntax: {}".format(line))
             return
+
+    def help_update(self):
+        """returns the help manual for update command"""
+        print("Usage: update <class> <id> <attribute> <value>\
+\nchanges value of attribute to a new value and updates time")
 
 
 if __name__ == '__main__':

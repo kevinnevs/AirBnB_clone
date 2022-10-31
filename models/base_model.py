@@ -3,7 +3,7 @@
 Base Model that defines all comon attributes/methods for other classes
 """
 import uuid
-import models
+from models import storage
 from datetime import datetime
 
 
@@ -26,7 +26,11 @@ class BaseModel:
             self.id = str(uuid.uuid4())
             self.created_at = datetime.now()
             self.updated_at = self.created_at
+<<<<<<< HEAD
             models.storage.new(self)
+=======
+            storage.new(self)
+>>>>>>> 6159a1a3d137c171f6110cedf79323f71ac26886
 
     def __str__(self):
         """
@@ -46,7 +50,7 @@ class BaseModel:
         saves the class
         """
         self.updated_at = datetime.now()
-        models.storage.save()
+        storage.save()
 
     def to_dict(self):
         """
